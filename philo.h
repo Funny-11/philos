@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:10:25 by gifanell          #+#    #+#             */
-/*   Updated: 2025/09/18 20:35:24 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/09/22 15:09:59 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ typedef struct s_philo
 
 /******		PROTOTIPI FUNZIONI		******/
 void	cleanup_mutex_array(pthread_mutex_t *forks, int count);
-void	destroy_forks(t_table *table);
+void	destroy_forks(t_table *table, t_philo *philos);
 void	smart_sleep(long duration, t_table *table);
 void	print_action(t_philo *philo, const char *action);
 void	*philo_routine(void	*arg);
@@ -75,9 +75,15 @@ void	philo_think(t_philo *philo);
 void	take_forks(t_philo *philo);
 void	drop_forks(t_philo *philo);
 long	get_timestamp(void);
+int		all_philos_full(t_philo *philos);
 int		init_mutex_array(pthread_mutex_t *forks, int count);
 int		init_forks(t_table *table);
 int		init_philo(t_philo *philos, t_table *table);
 int		parse_arguments(int argc, char **argv, t_table *table);
+int		alloc_init(int argc, char **argv, t_table *table, t_philo **philos);
+int		create_threads(t_table *table, t_philo *philos, pthread_t *monitor);
+void	join_and_cleanup(t_table *table, t_philo *philos, pthread_t monitor);
+int		check_philo_death(t_table *table, t_philo *philos, int i,
+			long current_time);
 
 #endif

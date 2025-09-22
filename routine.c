@@ -14,20 +14,10 @@
 
 void	take_forks(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->right_fork);
-		print_action(philo, "has taken right fork");
-		pthread_mutex_lock(philo->left_fork);
-		print_action(philo, "has taken left fork");
-	}
-	else
-	{
-		pthread_mutex_lock(philo->left_fork);
-		print_action(philo, "has taken left fork");
-		pthread_mutex_lock(philo->right_fork);
-		print_action(philo, "has taken right fork");
-	}
+	pthread_mutex_lock(philo->left_fork);
+	print_action(philo, "has taken left fork");
+	pthread_mutex_lock(philo->right_fork);
+	print_action(philo, "has taken right fork");
 }
 
 void	drop_forks(t_philo *philo)
@@ -42,7 +32,7 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		usleep(100);
+		usleep(500);
 	while (!(philo->table->end_simulation))
 	{
 		philo_eat(philo);

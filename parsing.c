@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:11:02 by gifanell          #+#    #+#             */
-/*   Updated: 2025/09/18 18:11:23 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/09/22 12:18:31 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,13 @@ int	parse_arguments(int argc, char **argv, t_table *table)
 		table->nbr_limitsmeals = ft_atoi(argv[5]);
 	else
 		table->nbr_limitsmeals = -1;
-	if (table->philo_nbr < 1 || table->time_to_die <= 0
+	if (table->philo_nbr < 1 || table->philo_nbr > 200
+		|| table->time_to_die <= 0
+		|| table->time_to_die <= 60
 		|| table->time_to_eat <= 0
+		|| table->time_to_eat <= 60
 		|| table->time_to_sleep <= 0
+		|| table->time_to_sleep <= 60
 		|| (argc == 6 && table->nbr_limitsmeals <= 0))
 		return (1);
 	table->end_simulation = 0;

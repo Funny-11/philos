@@ -65,7 +65,7 @@ int	init_forks(t_table	*table)
 	return (0);
 }
 
-void	destroy_forks(t_table *table)
+void	destroy_forks(t_table *table, t_philo *philos)
 {
 	int	i;
 
@@ -73,10 +73,14 @@ void	destroy_forks(t_table *table)
 		return ;
 	i = 0;
 	while (i < table->philo_nbr)
-		pthread_mutex_destroy(&table->forks[i++]);
+	{
+		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&philos[i].meal_lock);
+		i++;
+	}
+	pthread_mutex_destroy(&table->print_lock);
 	free(table->forks);
 	table->forks = NULL;
-	pthread_mutex_destroy(&table->print_lock);
 }
 
 int	init_philo(t_philo *philos, t_table *table)
@@ -95,6 +99,7 @@ int	init_philo(t_philo *philos, t_table *table)
 		philos[i].left_fork = &table->forks[i];
 		philos[i].right_fork = &table->forks[(i + 1) % n];
 		philos[i].table = table;
+		pthread_mutex_init(&philos[i].meal_lock, NULL);
 		i++;
 	}
 	return (0);
