@@ -45,6 +45,8 @@ typedef struct s_table
 	bool			end_simulation;
 
 	pthread_mutex_t	print_lock;
+	pthread_mutex_t	death_lock;
+
 	pthread_mutex_t	*forks;
 }	t_table;
 
@@ -56,6 +58,9 @@ typedef struct s_philo
 
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
+
+	// lock usato sia per impostare il timestamp dell'ultimo pasto
+	// che per impostare il numero di pasti fatti
 	pthread_mutex_t		meal_lock;
 
 	t_table				*table;
@@ -81,9 +86,11 @@ int		init_forks(t_table *table);
 int		init_philo(t_philo *philos, t_table *table);
 int		parse_arguments(int argc, char **argv, t_table *table);
 int		alloc_init(int argc, char **argv, t_table *table, t_philo **philos);
-int		create_threads(t_table *table, t_philo *philos, pthread_t *monitor);
-void	join_and_cleanup(t_table *table, t_philo *philos, pthread_t monitor);
+int		create_threads(t_table *table, t_philo *philos);
+void	join_and_cleanup(t_table *table, t_philo *philos);
 int		check_philo_death(t_table *table, t_philo *philos, int i,
 			long current_time);
 
+long	pthread_get_long(pthread_mutex_t *lock, long *value);
+bool	pthread_get_bool(pthread_mutex_t *lock, bool *value);
 #endif

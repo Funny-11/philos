@@ -25,11 +25,6 @@ int	alloc_init(int argc, char **argv, t_table *table, t_philo **philos)
 		return (1);
 	}
 	*philos = malloc(sizeof(t_philo) * table->philo_nbr);
-	if (table->philo_nbr == 1)
-	{
-		printf("0 1 has taken left fork\n410 1 died\n");
-		return (1);
-	}
 	if (!philos)
 	{
 		destroy_forks(table, *philos);
@@ -40,7 +35,7 @@ int	alloc_init(int argc, char **argv, t_table *table, t_philo **philos)
 	return (0);
 }
 
-int	create_threads(t_table *table, t_philo *philos, pthread_t *monitor)
+int	create_threads(t_table *table, t_philo *philos)
 {
 	int	i;
 
@@ -55,22 +50,16 @@ int	create_threads(t_table *table, t_philo *philos, pthread_t *monitor)
 		}
 		i++;
 	}
-	if (pthread_create(monitor, NULL, &monitor_routine, philos) != 0)
-	{
-		printf("Error: Monitor thread creation failed\n");
-		return (1);
-	}
 	return (0);
 }
 
-void	join_and_cleanup(t_table *table, t_philo *philos, pthread_t monitor)
+void	join_and_cleanup(t_table *table, t_philo *philos)
 {
 	int	i;
 
 	i = 0;
 	while (i < table->philo_nbr)
 		pthread_join(philos[i++].thread_id, NULL);
-	pthread_join(monitor, NULL);
 	destroy_forks(table, philos);
 	free(philos);
 }
@@ -79,12 +68,15 @@ int	main(int argc, char **argv)
 {
 	t_table		table;
 	t_philo		*philos;
-	pthread_t	monitor_thread;
 
+	table = (t_table){0}; // inizializzazione: tutto a zero
 	if (alloc_init(argc, argv, &table, &philos))
 		return (1);
-	if (create_threads(&table, philos, &monitor_thread))
+	if (create_threads(&table, philos))
 		return (1);
-	join_and_cleanup(&table, philos, monitor_thread);
+	// invece di creare un thread per monitorare, e aspettare che questo finisca
+	// si puo' semplicemente usare il thread principale che non viene usato
+	monitor_routine(philos);
+	join_and_cleanup(&table, philos);
 	return (0);
 }

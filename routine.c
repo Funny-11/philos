@@ -20,10 +20,23 @@ void	take_forks(t_philo *philo)
 	print_action(philo, "has taken right fork");
 }
 
+/*
+Invertito l'ordine dei unlock perche bisogna seguire l'ordine di acquisizione,
+come uno stack.
+
+Esempio:
+Lock:
+left
+	|-> right
+
+Unlock:
+		right
+left <--|
+*/
 void	drop_forks(t_philo *philo)
 {
-	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
 }
 
 void	*philo_routine(void *arg)
@@ -31,8 +44,14 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	// non si fa niente, ci pensa il monitor ad avvisare che il philo e' morto.
+	if (philo->table->philo_nbr == 1)
+		return (NULL);
+	// usleep minimo per creare un offset per i filosofi pari,
+	// farli partire leggermente piu' tardi
+	// per "bilanciare" l'uso delle forchette da tutti i filosofi
 	if (philo->id % 2 == 0)
-		usleep(500);
+		usleep(50);
 	while (!(philo->table->end_simulation))
 	{
 		philo_eat(philo);

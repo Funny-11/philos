@@ -22,12 +22,16 @@ long	get_timestamp(void)
 	return (timestamp);
 }
 
+/*
+Non e' necessario fare il check nel loop, se rallenta troppo il programma
+si puo' considerare di toglierlo e fare solo il check del >= duration
+*/
 void	smart_sleep(long duration, t_table *table)
 {
 	long	start_time;
 
 	start_time = get_timestamp();
-	while (!(table->end_simulation))
+	while (!pthread_get_bool(&table->death_lock, &table->end_simulation))
 	{
 		if ((get_timestamp() - start_time) >= duration)
 			break ;
@@ -37,13 +41,15 @@ void	smart_sleep(long duration, t_table *table)
 
 void	print_action(t_philo *philo, const char *action)
 {
+	t_table	*table;
 	long	timestamp;
 
-	pthread_mutex_lock(&philo->table->print_lock);
-	if (!philo->table->end_simulation)
+	table = philo->table;
+	pthread_mutex_lock(&table->print_lock);
+	if (!pthread_get_bool(&table->death_lock, &table->end_simulation))
 	{
-		timestamp = get_timestamp() - philo->table->start_simulation;
+		timestamp = get_timestamp() - table->start_simulation;
 		printf("%ld %d %s\n", timestamp, philo->id + 1, action);
 	}
-	pthread_mutex_unlock(&philo->table->print_lock);
+	pthread_mutex_unlock(&table->print_lock);
 }

@@ -15,12 +15,12 @@
 void	philo_eat(t_philo *philo)
 {
 	take_forks(philo);
-	pthread_mutex_lock(&philo->table->print_lock);
 	pthread_mutex_lock(&philo->meal_lock);
 	philo->last_meal_time = get_timestamp();
-	pthread_mutex_unlock(&philo->table->print_lock);
+	pthread_mutex_unlock(&philo->meal_lock);
 	print_action(philo, "is eating");
 	smart_sleep(philo->table->time_to_eat, philo->table);
+	pthread_mutex_lock(&philo->meal_lock);
 	philo->meals_counter++;
 	pthread_mutex_unlock(&philo->meal_lock);
 	drop_forks(philo);

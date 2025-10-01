@@ -21,7 +21,12 @@ static int	ft_atoi(const char *str)
 		n = n * 10 + (*str++ - '0');
 	return ((int)n);
 }
-
+/*
+Non e' richiesta la limitazione dei valori, basta che sia un numero positivo.
+Il fatto che poi il programma funzioni "male",
+e' causato dalla gestione delle risorse del pc
+(es. con 5000 philo/thread e' ovvio che sia instabile ma non e' colpa nostra)
+*/
 int	parse_arguments(int argc, char **argv, t_table *table)
 {
 	if (argc != 5 && argc != 6)
@@ -34,13 +39,13 @@ int	parse_arguments(int argc, char **argv, t_table *table)
 		table->nbr_limitsmeals = ft_atoi(argv[5]);
 	else
 		table->nbr_limitsmeals = -1;
-	if (table->philo_nbr < 1 || table->philo_nbr > 200
+	if (table->philo_nbr <= 0
 		|| table->time_to_die <= 0
-		|| table->time_to_die <= 60
+		|| table->time_to_die <= 0
 		|| table->time_to_eat <= 0
-		|| table->time_to_eat <= 60
+		|| table->time_to_eat <= 0
 		|| table->time_to_sleep <= 0
-		|| table->time_to_sleep <= 60
+		|| table->time_to_sleep <= 0
 		|| (argc == 6 && table->nbr_limitsmeals <= 0))
 		return (1);
 	table->end_simulation = 0;

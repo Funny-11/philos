@@ -16,6 +16,7 @@ int	all_philos_full(t_philo *philos)
 {
 	int		i;
 	int		full;
+	int		meals_counter;
 	t_table	*table;
 
 	table = philos[0].table;
@@ -23,8 +24,10 @@ int	all_philos_full(t_philo *philos)
 	full = 0;
 	while (i < table->philo_nbr)
 	{
+		meals_counter = pthread_get_long(&philos[i].meal_lock,
+				&philos[i].meals_counter);
 		if (table->nbr_limitsmeals != -1
-			&& philos[i].meals_counter >= table->nbr_limitsmeals)
+			&& meals_counter >= table->nbr_limitsmeals)
 			full++;
 		i++;
 	}
@@ -47,7 +50,9 @@ int	check_philo_death(t_table *table, t_philo *philos, int i,
 			printf("%ld %d died\n",
 				current_time - table->start_simulation,
 				philos[i].id + 1);
+			pthread_mutex_lock(&table->death_lock);
 			table->end_simulation = 1;
+			pthread_mutex_unlock(&table->death_lock);
 		}
 		pthread_mutex_unlock(&table->print_lock);
 		return (1);
@@ -64,10 +69,11 @@ void	*monitor_routine(void *arg)
 
 	philos = (t_philo *)arg;
 	table = philos[0].table;
-	while (!table->end_simulation)
+	while (!pthread_get_bool(&table->death_lock, &table->end_simulation))
 	{
 		i = 0;
-		while (i < table->philo_nbr && !table->end_simulation)
+		while (i < table->philo_nbr
+			&& !pthread_get_bool(&table->death_lock, &table->end_simulation))
 		{
 			current_time = get_timestamp();
 			if (check_philo_death(table, philos, i, current_time))
@@ -78,7 +84,9 @@ void	*monitor_routine(void *arg)
 				table->end_simulation = 1;
 				return (NULL);
 			}
-			usleep(1000);
+			// questo usleep serve per fare in modo che il computer possa gestire le risorse in modo efficiente (divide il consumo tra tutti i processori virtuali)
+			// per capire meglio cosa succede, lancia htop, monitora l'uso della cpu (%) con e senza `usleep`
+			usleep(1);
 		}
 	}
 	return (NULL);
