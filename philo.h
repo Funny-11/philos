@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:10:25 by gifanell          #+#    #+#             */
-/*   Updated: 2025/09/22 15:09:59 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/10/14 16:01:06 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,6 @@
 # include <sys/time.h>
 # include <limits.h>
 
-/*
-#define EAT "is eating"
-#define SLEEP "is sleeping"
-#define THINK "is thinking"
-#define DIE "is dead"
-#define SURVIVE "has finished his theory"
-#define LF_TAKE "has taken his left fork"
-#define RF_TAKE "has taken his right fork"
-#define LF_REL "released left fork"
-#define RF_REL "released right fork"
-*/
-
 /******		STRUTTURE		******/
 typedef struct s_table
 {
@@ -45,7 +33,7 @@ typedef struct s_table
 	bool			end_simulation;
 
 	pthread_mutex_t	print_lock;
-	pthread_mutex_t	death_lock;
+	pthread_mutex_t	dead_lock;
 
 	pthread_mutex_t	*forks;
 }	t_table;
@@ -58,9 +46,6 @@ typedef struct s_philo
 
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
-
-	// lock usato sia per impostare il timestamp dell'ultimo pasto
-	// che per impostare il numero di pasti fatti
 	pthread_mutex_t		meal_lock;
 
 	t_table				*table;

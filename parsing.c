@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:11:02 by gifanell          #+#    #+#             */
-/*   Updated: 2025/09/22 12:18:31 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/10/14 15:52:54 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,7 @@ static int	ft_atoi(const char *str)
 		n = n * 10 + (*str++ - '0');
 	return ((int)n);
 }
-/*
-Non e' richiesta la limitazione dei valori, basta che sia un numero positivo.
-Il fatto che poi il programma funzioni "male",
-e' causato dalla gestione delle risorse del pc
-(es. con 5000 philo/thread e' ovvio che sia instabile ma non e' colpa nostra)
-*/
+
 int	parse_arguments(int argc, char **argv, t_table *table)
 {
 	if (argc != 5 && argc != 6)

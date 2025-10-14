@@ -57,7 +57,7 @@ int	init_forks(t_table	*table)
 		free(table->forks);
 		return (1);
 	}
-	if (pthread_mutex_init(&table->death_lock, NULL) != 0)
+	if (pthread_mutex_init(&table->dead_lock, NULL) != 0)
 	{
 		pthread_mutex_destroy(&table->print_lock);
 		cleanup_mutex_array(table->forks, table->philo_nbr);
@@ -81,44 +81,11 @@ void	destroy_forks(t_table *table, t_philo *philos)
 		i++;
 	}
 	pthread_mutex_destroy(&table->print_lock);
-	pthread_mutex_destroy(&table->death_lock);
+	pthread_mutex_destroy(&table->dead_lock);
 	free(table->forks);
 	table->forks = NULL;
 }
-/*
-Non e' una buona idea dare a tutti i filosofi la stessa logica per le forks,
-perche si puo' creare un deadlock
-(tutti prendono una fork (la sx o dx, dipende da come e' scritto nel codice) e aspettano la seconda)
 
-Esempio:
-philos = 2
-forks:
-- fork 0
-- fork 1
-
-philo_hands:
-- philo 0
-	- left: fork 0
-	- right: fork 1
-- philo 1
-	- left: fork 1
-	- right: fork 0
-
-Soluzione:
-invertire la sinistra e destra di uno dei filosofi
-philo_hands:
-- philo 0
-	- left: fork 0
-	- right: fork 1
-- philo 1
-	- left: fork 0
-	- right: fork 1
-
-In questo modo entrambi "combattono" per ottenere la prima fork,
-e chi vince si prende con "calma" la seconda,
-perche' l'altro filosofo aspetta ancora di prendere la prima fork
-
-*/
 int	init_philo(t_philo *philos, t_table *table)
 {
 	int	i;

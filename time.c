@@ -31,7 +31,7 @@ void	smart_sleep(long duration, t_table *table)
 	long	start_time;
 
 	start_time = get_timestamp();
-	while (!pthread_get_bool(&table->death_lock, &table->end_simulation))
+	while (!pthread_get_bool(&table->dead_lock, &table->end_simulation))
 	{
 		if ((get_timestamp() - start_time) >= duration)
 			break ;
@@ -46,7 +46,7 @@ void	print_action(t_philo *philo, const char *action)
 
 	table = philo->table;
 	pthread_mutex_lock(&table->print_lock);
-	if (!pthread_get_bool(&table->death_lock, &table->end_simulation))
+	if (!pthread_get_bool(&table->dead_lock, &table->end_simulation))
 	{
 		timestamp = get_timestamp() - table->start_simulation;
 		printf("%ld %d %s\n", timestamp, philo->id + 1, action);

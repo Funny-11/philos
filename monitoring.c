@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:57:41 by gifanell          #+#    #+#             */
-/*   Updated: 2025/09/22 15:12:21 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/10/14 15:56:23 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,20 @@ int	check_philo_death(t_table *table, t_philo *philos, int i,
 			printf("%ld %d died\n",
 				current_time - table->start_simulation,
 				philos[i].id + 1);
-			pthread_mutex_lock(&table->death_lock);
+			pthread_mutex_lock(&table->dead_lock);
 			table->end_simulation = 1;
-			pthread_mutex_unlock(&table->death_lock);
+			pthread_mutex_unlock(&table->dead_lock);
 		}
 		pthread_mutex_unlock(&table->print_lock);
 		return (1);
 	}
 	return (0);
+}
+
+static void	end_simulation_on(t_table *table)
+{
+	table->end_simulation = 1;
+	return ;
 }
 
 void	*monitor_routine(void *arg)
@@ -69,23 +75,18 @@ void	*monitor_routine(void *arg)
 
 	philos = (t_philo *)arg;
 	table = philos[0].table;
-	while (!pthread_get_bool(&table->death_lock, &table->end_simulation))
+	while (!pthread_get_bool(&table->dead_lock, &table->end_simulation))
 	{
 		i = 0;
 		while (i < table->philo_nbr
-			&& !pthread_get_bool(&table->death_lock, &table->end_simulation))
+			&& !pthread_get_bool(&table->dead_lock, &table->end_simulation))
 		{
 			current_time = get_timestamp();
 			if (check_philo_death(table, philos, i, current_time))
 				return (NULL);
 			i++;
 			if (all_philos_full(philos))
-			{
-				table->end_simulation = 1;
-				return (NULL);
-			}
-			// questo usleep serve per fare in modo che il computer possa gestire le risorse in modo efficiente (divide il consumo tra tutti i processori virtuali)
-			// per capire meglio cosa succede, lancia htop, monitora l'uso della cpu (%) con e senza `usleep`
+				return (end_simulation_on(table), NULL);
 			usleep(1);
 		}
 	}

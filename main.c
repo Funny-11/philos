@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:10:25 by gifanell          #+#    #+#             */
-/*   Updated: 2025/09/22 15:10:13 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/10/14 16:07:08 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ int	main(int argc, char **argv)
 	t_table		table;
 	t_philo		*philos;
 
-	table = (t_table){0}; // inizializzazione: tutto a zero
+	(void)argc;
+	philos = NULL;
+	table = (t_table){0};
 	if (alloc_init(argc, argv, &table, &philos))
 		return (1);
 	if (create_threads(&table, philos))
 		return (1);
-	// invece di creare un thread per monitorare, e aspettare che questo finisca
-	// si puo' semplicemente usare il thread principale che non viene usato
 	monitor_routine(philos);
 	join_and_cleanup(&table, philos);
 	return (0);
