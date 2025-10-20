@@ -26,20 +26,34 @@ void	drop_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 }
 
+void philo_ready(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->meal_lock);
+	philo->last_meal_time = get_timestamp();
+	pthread_mutex_unlock(&philo->meal_lock);
+}
+
 void	*philo_routine(void *arg)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	if (philo->table->philo_nbr == 1)
+	{
+		print_action(philo, "has taken left fork");
+		philo_ready(philo);
 		return (NULL);
+	}
 	if (philo->id % 2 == 0)
-		usleep(50);
-	while (!(philo->table->end_simulation))
+		usleep(100);
+	philo_ready(philo);
+	while (!pthread_get_bool(&philo->table->dead_lock,
+				&philo->table->end_simulation))
 	{
 		philo_eat(philo);
 		if (philo->table->nbr_limitsmeals != -1
-			&& philo->meals_counter >= philo->table->nbr_limitsmeals)
+			&& pthread_get_long(&philo->meal_lock, &philo->meals_counter)
+			>= philo->table->nbr_limitsmeals)
 			break ;
 		philo_sleep(philo);
 		philo_think(philo);

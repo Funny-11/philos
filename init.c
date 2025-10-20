@@ -97,7 +97,7 @@ int	init_philo(t_philo *philos, t_table *table)
 	{
 		philos[i].id = i;
 		philos[i].meals_counter = 0;
-		philos[i].last_meal_time = table->start_simulation;
+		philos[i].last_meal_time = 0;
 		philos[i].left_fork = &table->forks[i];
 		philos[i].right_fork = &table->forks[(i + 1) % n];
 		if (i == n - 1)

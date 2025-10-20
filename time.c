@@ -12,10 +12,10 @@
 
 #include "philo.h"
 
-long	get_timestamp(void)
+size_t	get_timestamp(void)
 {
 	struct timeval	tv;
-	long			timestamp;
+	size_t			timestamp;
 
 	gettimeofday(&tv, NULL);
 	timestamp = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
@@ -28,28 +28,26 @@ si puo' considerare di toglierlo e fare solo il check del >= duration
 */
 void	smart_sleep(long duration, t_table *table)
 {
-	long	start_time;
+	size_t	start_time;
+	(void)table;
 
 	start_time = get_timestamp();
-	while (!pthread_get_bool(&table->dead_lock, &table->end_simulation))
+	while (!((get_timestamp() - start_time) >= (size_t)duration))
 	{
-		if ((get_timestamp() - start_time) >= duration)
-			break ;
-		usleep(500);
+		usleep(50);
 	}
 }
 
 void	print_action(t_philo *philo, const char *action)
 {
 	t_table	*table;
-	long	timestamp;
+	size_t	timestamp;
 
 	table = philo->table;
+	if (pthread_get_bool(&table->dead_lock, &table->end_simulation))
+		return ;
 	pthread_mutex_lock(&table->print_lock);
-	if (!pthread_get_bool(&table->dead_lock, &table->end_simulation))
-	{
-		timestamp = get_timestamp() - table->start_simulation;
-		printf("%ld %d %s\n", timestamp, philo->id + 1, action);
-	}
+	timestamp = get_timestamp() - table->start_simulation;
+	printf("%ld %d %s\n", timestamp, philo->id + 1, action);
 	pthread_mutex_unlock(&table->print_lock);
 }

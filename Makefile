@@ -6,7 +6,7 @@
 #    By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/13 23:08:55 by gifanell          #+#    #+#              #
-#    Updated: 2025/10/14 16:09:25 by gifanell         ###   ########.fr        #
+#    Updated: 2025/10/20 20:24:06 by gifanell         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = philo
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -pthread -g
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 RM = rm -f
 

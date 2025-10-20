@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:10:25 by gifanell          #+#    #+#             */
-/*   Updated: 2025/10/14 16:01:06 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/10/20 20:18:23 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_philo
 {
 	int					id;
 	long				meals_counter;
-	long				last_meal_time;
+	size_t				last_meal_time;
 
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
@@ -64,7 +64,7 @@ void	philo_sleep(t_philo *philo);
 void	philo_think(t_philo *philo);
 void	take_forks(t_philo *philo);
 void	drop_forks(t_philo *philo);
-long	get_timestamp(void);
+size_t	get_timestamp(void);
 int		all_philos_full(t_philo *philos);
 int		init_mutex_array(pthread_mutex_t *forks, int count);
 int		init_forks(t_table *table);
@@ -74,8 +74,9 @@ int		alloc_init(int argc, char **argv, t_table *table, t_philo **philos);
 int		create_threads(t_table *table, t_philo *philos);
 void	join_and_cleanup(t_table *table, t_philo *philos);
 int		check_philo_death(t_table *table, t_philo *philos, int i,
-			long current_time);
+			size_t current_time);
 
 long	pthread_get_long(pthread_mutex_t *lock, long *value);
+size_t	pthread_get_sizet(pthread_mutex_t *lock, size_t *value);
 bool	pthread_get_bool(pthread_mutex_t *lock, bool *value);
 #endif
