@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:57:41 by gifanell          #+#    #+#             */
-/*   Updated: 2025/10/20 20:23:11 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/10/21 20:08:06 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	check_philo_death(t_table *table, t_philo *philos, int i,
 	pthread_mutex_unlock(&philos[i].meal_lock);
 	if (last_meal_time == 0)
 		return (0);
-	if (current_time - last_meal_time >= (size_t)table->time_to_die)
+	if (current_time - last_meal_time > (size_t)table->time_to_die)
 	{
 		end_simulation_on(table);
 		pthread_mutex_lock(&table->print_lock);

@@ -93,6 +93,7 @@ int	init_philo(t_philo *philos, t_table *table)
 
 	i = 0;
 	n = table->philo_nbr;
+	table->start_simulation = get_timestamp();
 	while (i < n)
 	{
 		philos[i].id = i;

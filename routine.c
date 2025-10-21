@@ -45,7 +45,7 @@ void	*philo_routine(void *arg)
 		return (NULL);
 	}
 	if (philo->id % 2 == 0)
-		usleep(100);
+		smart_sleep(1000, philo->table);
 	philo_ready(philo);
 	while (!pthread_get_bool(&philo->table->dead_lock,
 				&philo->table->end_simulation))

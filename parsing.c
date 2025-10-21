@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:11:02 by gifanell          #+#    #+#             */
-/*   Updated: 2025/10/14 15:52:54 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/10/21 19:51:51 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,5 @@ int	parse_arguments(int argc, char **argv, t_table *table)
 		|| (argc == 6 && table->nbr_limitsmeals <= 0))
 		return (1);
 	table->end_simulation = 0;
-	table->start_simulation = get_timestamp();
 	return (0);
 }
