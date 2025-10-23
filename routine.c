@@ -26,7 +26,7 @@ void	drop_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 }
 
-void philo_ready(t_philo *philo)
+void	philo_ready(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->meal_lock);
 	philo->last_meal_time = get_timestamp();
@@ -48,7 +48,7 @@ void	*philo_routine(void *arg)
 		smart_sleep(1000, philo->table);
 	philo_ready(philo);
 	while (!pthread_get_bool(&philo->table->dead_lock,
-				&philo->table->end_simulation))
+			&philo->table->end_simulation))
 	{
 		philo_eat(philo);
 		if (philo->table->nbr_limitsmeals != -1

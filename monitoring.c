@@ -6,7 +6,7 @@
 /*   By: gifanell <gifanell@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 14:57:41 by gifanell          #+#    #+#             */
-/*   Updated: 2025/10/21 20:08:06 by gifanell         ###   ########.fr       */
+/*   Updated: 2025/10/21 20:32:29 by gifanell         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	all_philos_full(t_philo *philos)
 	{
 		if (table->nbr_limitsmeals != -1
 			&& pthread_get_long(&philos[i].meal_lock,
-			&philos[i].meals_counter) >= table->nbr_limitsmeals)
+				&philos[i].meals_counter) >= table->nbr_limitsmeals)
 			full++;
 		i++;
 	}
@@ -65,7 +65,6 @@ int	check_philo_death(t_table *table, t_philo *philos, int i,
 	return (0);
 }
 
-
 void	*monitor_routine(void *arg)
 {
 	t_philo	*philos;
@@ -88,7 +87,7 @@ void	*monitor_routine(void *arg)
 			i++;
 		}
 		if (all_philos_full(philos))
-				return (end_simulation_on(table), NULL);
+			return (end_simulation_on(table), NULL);
 		usleep(50);
 	}
 	return (NULL);

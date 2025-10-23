@@ -33,7 +33,6 @@ size_t	pthread_get_sizet(pthread_mutex_t *lock, size_t *value)
 	return (res);
 }
 
-
 bool	pthread_get_bool(pthread_mutex_t *lock, bool *value)
 {
 	bool	res;

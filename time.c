@@ -22,15 +22,11 @@ size_t	get_timestamp(void)
 	return (timestamp);
 }
 
-/*
-Non e' necessario fare il check nel loop, se rallenta troppo il programma
-si puo' considerare di toglierlo e fare solo il check del >= duration
-*/
 void	smart_sleep(long duration, t_table *table)
 {
 	size_t	start_time;
-	(void)table;
 
+	(void)table;
 	start_time = get_timestamp();
 	while (!((get_timestamp() - start_time) >= (size_t)duration))
 	{
